@@ -16,8 +16,17 @@
         </p>
 
         <p>
-            <a href="{% url 'accounts:user-detail' article.author_id %}">{{ article.author }}</a>
-            | {{ article.created_at|date:"d.m.Y H:i:s" }}
+            {% if article.author %}
+                <a href="{% url 'accounts:user-detail' article.author_id %}">{{ article.author }}</a>
+            {% else %}
+                <span>Нет автора</span>
+            {% endif %}
+                | {{ article.created_at|date:"d.m.Y H:i:s" }}
+            <p class="counter">Likes : {{ article.article_likes.count }}</p>
+    {% if user.is_authenticated %}
+        <button class="likeButton" style="{% if article.pk in liked_articles %}display: none{% endif %}"><a onclick="like_function(event)" href="{% url 'article:like' article.id %}">Like</a></button>
+        <button class="unlikeButton" style="{% if article.pk not in liked_articles %}display: none{% endif %}"><a onclick="unlike_function(event)" href="{% url 'article:unlike' article.id %}">Unlike</a></button>
+    {% endif %}
         </p>
     </div>
 
@@ -27,5 +36,7 @@
 
 
 {% if is_paginated %}
-     {% include 'partial/pagination.html' %}
+     {% include 'partial/paginate.html' %}
 {% endif %}
+
+

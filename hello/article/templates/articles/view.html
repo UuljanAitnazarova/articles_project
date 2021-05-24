@@ -22,14 +22,104 @@
 
 {% block content %}
     <p>Title: {{ article.title }}</p>
+    <div>
+    {% if user.is_authenticated %}
+        <button class="likeButton" style="{% if article.pk in liked_articles %}display: none{% endif %}"><a onclick="like_function(event)" href="{% url 'article:like' article.id %}">Like</a></button>
+        <button class="unlikeButton" style="{% if article.pk not in liked_articles %}display: none{% endif %}"><a onclick="unlike_function(event)" href="{% url 'article:unlike' article.id %}">Unlike</a></button>
+    {% endif %}
+
+    <p class="counter">Likes : {{ article.article_likes.count }}</p>
     <p>Author: {{ article.author }}</p>
     <p>Content: {{ article.content }}</p>
     <p>Tags: {% for tag in article.tags.all %}{{ tag.tag }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
 
+    </div>
+
     <h2>Comments:</h2>
     {% for comment in article.comments.all %}
+        <div>
         <p>{{ comment.author }}: {{ comment.comment }}</p>
+            {% if user.is_authenticated %}
+                <button class="likeButton" style="{% if comment.pk in liked_comments %}display: none{% endif %}"><a onclick="like_function(event)" href="{% url 'article:comment-like' comment.id %}">Like</a></button>
+                <button class="unlikeButton" style="{% if comment.pk not in liked_comments %}display: none{% endif %}"><a onclick="unlike_function(event)" href="{% url 'article:comment-unlike' comment.id %}">UnLike</a></button>
+            {% endif %}
+            <p class="counter">Likes: {{ comment.likes.count }}</p>
+        </div>
     {% empty %}
         <p>Нет комментариев :(</p>
     {% endfor %}
+
+
+{#    <script>#}
+{#    async function makeRequest(url, method='GET') {#}
+{#    let response = await fetch(url, {method});#}
+{##}
+{#    if (response.ok) {  // нормальный ответ#}
+{#        return await response.json();#}
+{#    } else {            // ошибка#}
+{#        let error = new Error(response.statusText);#}
+{#        error.response = response;#}
+{#        throw error;#}
+{#    }#}
+{#}#}
+{#    like_function = async(event)=>{#}
+{#        try{#}
+{#            event.preventDefault()#}
+{#            let a = event.target;#}
+{#            console.log(a)#}
+{#            let url = a.getAttribute('href')#}
+{#            let result = await makeRequest(url)#}
+{#            console.log(result)#}
+{#            let but = a.parentElement#}
+{#            let but2 = but.parentElement.getElementsByClassName('unlikeButton')#}
+{#            but2[0].style.display='block';#}
+{#            but.style.display='none';#}
+{#            let counter = but.parentElement.getElementsByClassName('counter')#}
+{#            counter[0].innerText = 'Likes : ' +result#}
+{#        }#}
+{#        catch (error){#}
+{#            console.log(error)#}
+{#        }#}
+{#    }#}
+{##}
+{#        like_function = async(event)=>{#}
+{#        try{#}
+{#            event.preventDefault()#}
+{#            let a = event.target;#}
+{#            console.log(a)#}
+{#            let url = a.getAttribute('href')#}
+{#            let result = await makeRequest(url)#}
+{#            console.log(result)#}
+{#            let but = a.parentElement#}
+{#            let but2 = but.parentElement.getElementsByClassName('unlikeButton')#}
+{#            but2[0].style.display='block';#}
+{#            but.style.display='none';#}
+{#            let counter = but.parentElement.getElementsByClassName('counter')#}
+{#            counter[0].innerText = 'Likes : ' +result#}
+{#        }#}
+{#        catch (error){#}
+{#            console.log(error)#}
+{#        }#}
+{#    }#}
+{##}
+{#    unlike_function = async(event)=>{#}
+{#        try{#}
+{#            event.preventDefault()#}
+{#            let a = event.target;#}
+{#            console.log(a)#}
+{#            let url = a.getAttribute('href')#}
+{#            let result = await makeRequest(url)#}
+{#            console.log(result)#}
+{#            let but = a.parentElement#}
+{#            let but2 = but.parentElement.getElementsByClassName('likeButton')#}
+{#            but2[0].style.display='block';#}
+{#            but.style.display='none';#}
+{#            let counter = but.parentElement.getElementsByClassName('counter')#}
+{#            counter[0].innerText = 'Likes : ' + result#}
+{#        }#}
+{#        catch (error){#}
+{#            console.log(error)#}
+{#        }#}
+{#    }#}
+{#    </script>#}
 {% endblock content %}

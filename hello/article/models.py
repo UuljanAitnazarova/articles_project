@@ -81,3 +81,30 @@ class Tag(BaseModel):
     
     def __str__(self):
         return self.tag
+
+
+class ArticleLikes(BaseModel):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='article_likes')
+    article = models.ForeignKey('article.Article', on_delete=models.CASCADE, related_name='article_likes')
+
+    class Meta:
+        db_table = 'article_likes'
+        verbose_name = 'Лайк статьи'
+        verbose_name_plural = 'Лайки статей'
+
+    def __str__(self):
+        return f'{self.user} - {self.article}'
+
+
+
+class CommentLikes(BaseModel):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='likes')
+    comment = models.ForeignKey('article.Comment', on_delete=models.CASCADE, related_name='likes')
+
+    class Meta:
+        db_table = 'comment_likes'
+        verbose_name = 'Лайк комментария'
+        verbose_name_plural = 'Лайки комментариев'
+
+    def __str__(self):
+        return f'{self.user} - {self.comment}'

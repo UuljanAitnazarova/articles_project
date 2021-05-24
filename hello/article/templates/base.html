@@ -29,5 +29,61 @@
         {% block content %}{% endblock content %}
     </div>
 
+
+
+    <script>
+    async function makeRequest(url, method='GET') {
+    let response = await fetch(url, {method});
+
+    if (response.ok) {  // нормальный ответ
+        return await response.json();
+    } else {            // ошибка
+        let error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+    }
+}
+    like_function = async(event)=>{
+        try{
+            event.preventDefault()
+            let a = event.target;
+            console.log(a)
+            let url = a.getAttribute('href')
+            let result = await makeRequest(url)
+            console.log(result)
+            let but = a.parentElement
+            let but2 = but.parentElement.getElementsByClassName('unlikeButton')
+            but2[0].style.display='block';
+            but.style.display='none';
+            let counter = but.parentElement.getElementsByClassName('counter')
+            counter[0].innerText = 'Likes : ' +result
+        }
+        catch (error){
+            console.log(error)
+        }
+    }
+
+
+    unlike_function = async(event)=>{
+        try{
+            event.preventDefault()
+            let a = event.target;
+            console.log(a)
+            let url = a.getAttribute('href')
+            let result = await makeRequest(url)
+            console.log(result)
+            let but = a.parentElement
+            let but2 = but.parentElement.getElementsByClassName('likeButton')
+            but2[0].style.display='block';
+            but.style.display='none';
+            let counter = but.parentElement.getElementsByClassName('counter')
+            counter[0].innerText = 'Likes : ' + result
+        }
+        catch (error){
+            console.log(error)
+        }
+    }
+    </script>
+
 </body>
 </html>

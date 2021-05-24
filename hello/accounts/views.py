@@ -172,6 +172,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
             form_kwargs['files'] = self.request.FILES
         # 6. Создаём объект формы, используя словарь, который был объявлен выше,
         # распаковывая его в kwargs конструктора формы и возвращаем его (объект формы)
+
         return self.profile_form_class(**form_kwargs)
 
     def get_success_url(self):
